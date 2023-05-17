@@ -12,9 +12,88 @@ body {
   line-height: 1.5;
 }
 
-#search-box {
+#search-form {
   font: inherit;
-  padding: 8px;
-  max-width: 320px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: auto;
+  max-width: 100%;
   margin-bottom: 16px;
+  background-color: aqua;
+}
+
+.form-elements {
+      display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+    /* margin: auto;
+      width: 25%;
+
+      padding: 10px; */
+}
+
+.css-input-field,
+.css-btn,
+.load-more {
+  height: 30px;
+  border-radius: 5px;
+  background-color: chartreuse;
+}
+
+.css-input-field {
+  margin-right: 10px;
+}
+
+.css-btn:hover,
+.load-more:hover {
+    background-color: #4CAF50;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.load-more {
+  border: 3px solid green;
+}
+
+.load-btn-css-container {
+    display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 15px;
+  
+}
+
+.photo-card {
+  display: flex;
+  flex-direction: column;
+  width: calc((100% - 30px) / 4);
+  background-color: rgb(222, 214, 214);
+  border-radius: 15px;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    
+width: calc((100% - 15px) / 4);
+}
+
+.is-hidden {
+  display: none;
 }
