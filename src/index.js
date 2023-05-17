@@ -21,6 +21,7 @@ function onSubmit(e) {
   e.preventDefault();
   clearMarkUp();
   userQuery = refs.inputEl.value.trim();
+  console.clear();
 
   if (userQuery !== '') {
       fetchPictures()
@@ -30,7 +31,14 @@ function onSubmit(e) {
          return Notiflix.Notify.info(
             'Sorry, there are no images matching your search query. Please try again.'
           );
-        } else createMarkUp(responce.data.hits);
+        }
+        else if (responce.data.hits.length < 4) { 
+          createMarkUp(responce.data.hits);
+          const totalHits = responce.data.totalHits;
+          Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+          return
+        }
+        else createMarkUp(responce.data.hits);
         const totalHits = responce.data.totalHits;
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
         page += 1;
@@ -47,8 +55,14 @@ function onSubmit(e) {
 
 function fetchPictures() { 
   return axios.get(
-    `${BASE_URL}/?key=36483572-589c8e3037882858d868a0c70&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=100&page=${page}`
-  ); 
+    `${BASE_URL}/?key=36483572-589c8e3037882858d868a0c70&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=4&page=${page}`
+  )
+    .catch(error => { 
+      refs.loadBtn.classList.add('is-hidden');
+      return Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );      
+    }); 
 }
 
 function clearInputField() {
@@ -107,7 +121,7 @@ function loadMorePictures() {
           "We're sorry, but you've reached the end of search results."
         );
       }
-      else if (responce.data.hits.length < 100) { 
+      else if (responce.data.hits.length < 4) { 
         refs.loadBtn.classList.add('is-hidden');
         createMarkUp(responce.data.hits);  
       }
