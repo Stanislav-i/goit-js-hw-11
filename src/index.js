@@ -2,6 +2,7 @@ import './css/styles.css';
 import Notiflix from 'notiflix';
 const axios = require('axios').default;
 const BASE_URL = 'https://pixabay.com/api';
+const API_KEY = '36483572-589c8e3037882858d868a0c70';
 
 let page = 1;
 let userQuery = '';
@@ -21,7 +22,6 @@ function onSubmit(e) {
   e.preventDefault();
   clearMarkUp();
   userQuery = refs.inputEl.value.trim();
-  console.clear();
 
   if (userQuery !== '') {
       fetchPictures()
@@ -32,7 +32,8 @@ function onSubmit(e) {
             'Sorry, there are no images matching your search query. Please try again.'
           );
         }
-        else if (responce.data.hits.length < 4) { 
+        else if (responce.data.hits.length < 40) {
+          refs.loadBtn.classList.add('is-hidden');
           createMarkUp(responce.data.hits);
           const totalHits = responce.data.totalHits;
           Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
@@ -53,16 +54,28 @@ function onSubmit(e) {
   }
 }
 
-function fetchPictures() { 
-  return axios.get(
-    `${BASE_URL}/?key=36483572-589c8e3037882858d868a0c70&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=4&page=${page}`
-  )
-    .catch(error => { 
+async function fetchPictures() { 
+    try {
+      const response = await axios.get(
+      `${BASE_URL}/?key=${API_KEY}&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
+    );
+      return response;
+    } catch (error) {
       refs.loadBtn.classList.add('is-hidden');
-      return Notiflix.Notify.info(
-        "We're sorry, but you've reached the end of search results."
-      );      
-    }); 
+          return Notiflix.Notify.info(
+            "We're sorry, but you've reached the end of search results."
+          );
+    }
+  // return axios
+    // .get(
+    //   `${BASE_URL}/?key=${API_KEY}&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
+    // )
+  //   .catch(error => {
+  //     refs.loadBtn.classList.add('is-hidden');
+  //     return Notiflix.Notify.info(
+  //       "We're sorry, but you've reached the end of search results."
+  //     );
+  //   }); 
 }
 
 function clearInputField() {
@@ -92,11 +105,11 @@ function createMarkUp(arr) {
       <b>${views}</b>
     </p>
     <p class="info-item">
-      <b>Comments</b>
+      <b>Cmnts</b>
       <b>${comments}</b>
     </p>
     <p class="info-item">
-      <b>Downloads</b>
+      <b>Dnds</b>
       <b>${downloads}</b>
     </p>
   </div>
@@ -121,7 +134,7 @@ function loadMorePictures() {
           "We're sorry, but you've reached the end of search results."
         );
       }
-      else if (responce.data.hits.length < 4) { 
+      else if (responce.data.hits.length < 40) { 
         refs.loadBtn.classList.add('is-hidden');
         createMarkUp(responce.data.hits);  
       }

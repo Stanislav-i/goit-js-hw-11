@@ -83,15 +83,15 @@ body {
   display: flex;
   flex-direction: row;
   gap: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: 2px;
+  padding-left: 2px;
 }
 
 .info-item {
     display: flex;
     flex-direction: column;
-    
-width: calc((100% - 15px) / 4);
+    align-items: center;
+    width: calc((100% - 15px) / 4);
 }
 
 .is-hidden {
