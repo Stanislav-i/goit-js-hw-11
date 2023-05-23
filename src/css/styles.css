@@ -12,6 +12,10 @@ body {
   line-height: 1.5;
 }
 
+a {
+  display: inline-block;
+}
+
 #search-form {
   font: inherit;
   padding-top: 8px;

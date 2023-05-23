@@ -24,28 +24,28 @@ function onSubmit(e) {
   userQuery = refs.inputEl.value.trim();
 
   if (userQuery !== '') {
-      fetchPictures()
+    fetchPictures()
       .then(responce => {
         if (responce.data.hits.length === 0) {
-        refs.loadBtn.classList.add('is-hidden');
-         return Notiflix.Notify.info(
+          refs.loadBtn.classList.add('is-hidden');
+          return Notiflix.Notify.info(
             'Sorry, there are no images matching your search query. Please try again.'
           );
-        }
-        else if (responce.data.hits.length < 40) {
+        } else if (responce.data.hits.length < 40) {
           refs.loadBtn.classList.add('is-hidden');
           createMarkUp(responce.data.hits);
           const totalHits = responce.data.totalHits;
           Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-          return
-        }
-        else createMarkUp(responce.data.hits);
+          return;
+        } else createMarkUp(responce.data.hits);
         const totalHits = responce.data.totalHits;
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
         page += 1;
-        refs.loadBtn.classList.remove("is-hidden");
+        refs.loadBtn.classList.remove('is-hidden');
       })
-      .catch(error => {console.log(error)})
+      .catch(error => {
+        console.log(error);
+      })
       .finally(clearInputField());
   } else {
     refs.loadBtn.classList.add('is-hidden');
@@ -54,28 +54,28 @@ function onSubmit(e) {
   }
 }
 
-async function fetchPictures() { 
-    try {
-      const response = await axios.get(
+async function fetchPictures() {
+  try {
+    const response = await axios.get(
       `${BASE_URL}/?key=${API_KEY}&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
     );
-      return response;
-    } catch (error) {
-      refs.loadBtn.classList.add('is-hidden');
-          return Notiflix.Notify.info(
-            "We're sorry, but you've reached the end of search results."
-          );
-    }
+    return response;
+  } catch (error) {
+    refs.loadBtn.classList.add('is-hidden');
+    return Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
   // return axios
-    // .get(
-    //   `${BASE_URL}/?key=${API_KEY}&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
-    // )
+  // .get(
+  //   `${BASE_URL}/?key=${API_KEY}&q=${userQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
+  // )
   //   .catch(error => {
   //     refs.loadBtn.classList.add('is-hidden');
   //     return Notiflix.Notify.info(
   //       "We're sorry, but you've reached the end of search results."
   //     );
-  //   }); 
+  //   });
 }
 
 function clearInputField() {
@@ -126,21 +126,35 @@ function clearMarkUp() {
 }
 
 function loadMorePictures() {
-  fetchPictures()
-    .then(responce => {
-      if (responce.data.hits.length === 0) {
-        refs.loadBtn.classList.add('is-hidden');
-        return Notiflix.Notify.info(
-          "We're sorry, but you've reached the end of search results."
-        );
-      }
-      else if (responce.data.hits.length < 40) { 
-        refs.loadBtn.classList.add('is-hidden');
-        createMarkUp(responce.data.hits);  
-      }
-      else createMarkUp(responce.data.hits)
-    })
-  
+  fetchPictures().then(responce => {
+    if (responce.data.hits.length === 0) {
+      refs.loadBtn.classList.add('is-hidden');
+      return Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+    } else if (responce.data.hits.length < 40) {
+      createMarkUp(responce.data.hits);
+      const { height: cardHeight } = document
+        .querySelector('.gallery')
+        .firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+      refs.loadBtn.classList.add('is-hidden');
+    } else {
+      createMarkUp(responce.data.hits);
+      const { height: cardHeight } = document
+        .querySelector('.gallery')
+        .firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+    }
+  });
+
   page += 1;
 }
-
