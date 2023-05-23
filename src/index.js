@@ -1,5 +1,9 @@
 import './css/styles.css';
 import Notiflix from 'notiflix';
+// Описан в документации
+import SimpleLightbox from "simplelightbox";
+// Дополнительный импорт стилей
+import "simplelightbox/dist/simple-lightbox.min.css";
 const axios = require('axios').default;
 const BASE_URL = 'https://pixabay.com/api';
 const API_KEY = '36483572-589c8e3037882858d868a0c70';
@@ -34,10 +38,12 @@ function onSubmit(e) {
         } else if (responce.data.hits.length < 40) {
           refs.loadBtn.classList.add('is-hidden');
           createMarkUp(responce.data.hits);
+          createLightbox();
           const totalHits = responce.data.totalHits;
           Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
           return;
         } else createMarkUp(responce.data.hits);
+        createLightbox();
         const totalHits = responce.data.totalHits;
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
         page += 1;
@@ -94,7 +100,9 @@ function createMarkUp(arr) {
         comments,
         downloads,
       }) => `<div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" height=300px />
+      <a class="gallery__link" href="${largeImageURL}">
+  <img src="${webformatURL}" alt="${tags}" loading="lazy" height=300px width=100% />
+  </a>
   <div class="info">
     <p class="info-item">
       <b>Likes</b>
@@ -134,6 +142,7 @@ function loadMorePictures() {
       );
     } else if (responce.data.hits.length < 40) {
       createMarkUp(responce.data.hits);
+      lbInstance.refresh();
       const { height: cardHeight } = document
         .querySelector('.gallery')
         .firstElementChild.getBoundingClientRect();
@@ -145,6 +154,7 @@ function loadMorePictures() {
       refs.loadBtn.classList.add('is-hidden');
     } else {
       createMarkUp(responce.data.hits);
+      lbInstance.refresh();
       const { height: cardHeight } = document
         .querySelector('.gallery')
         .firstElementChild.getBoundingClientRect();
@@ -158,3 +168,13 @@ function loadMorePictures() {
 
   page += 1;
 }
+
+function createLightbox() {
+  lbInstance = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionPosition: 'bottom',
+    captionDelay: 250,
+  });
+}
+
+
