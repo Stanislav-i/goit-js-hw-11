@@ -114,11 +114,11 @@ function createMarkUp(arr) {
       <b>${views}</b>
     </p>
     <p class="info-item">
-      <b>Cmnts</b>
+      <b>Comments</b>
       <b>${comments}</b>
     </p>
     <p class="info-item">
-      <b>Dnds</b>
+      <b>Downloads</b>
       <b>${downloads}</b>
     </p>
   </div>
