@@ -10,6 +10,7 @@ const API_KEY = '36483572-589c8e3037882858d868a0c70';
 
 let page = 1;
 let userQuery = '';
+let lbInstance;
 
 const refs = {
   formEl: document.getElementById('search-form'),
